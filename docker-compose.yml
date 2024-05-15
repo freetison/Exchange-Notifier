@@ -1,0 +1,45 @@
+services:
+  worker:
+    build: .
+    environment:
+      - MONGO_URL=${MONGO_URL}
+      - MONGO_INITDB_DATABASE=${MONGO_DB_NAME}
+      - MONGO_COLLECTION_NAME=${MONGO_COLLECTION_NAME}
+      - RABBITMQ_URL=${RABBITMQ_URL}
+      - QUEUE_NAME=${QUEUE_NAME}
+    env_file:
+      - .env
+    volumes:
+      - .:/usr/src/app
+    depends_on:
+      - mongodb
+      - rabbitmq
+    networks:
+      - local
+
+  mongodb:
+    image: mongo:latest
+    container_name: rules-engine-mongodb
+    restart: always
+    command: mongod --port 27019
+    ports:
+      - "27019:27019"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+      MONGO_INITDB_DATABASE: ${MONGO_DB_NAME}
+    volumes:
+      - ./data:/data/db
+    networks:
+      - local
+
+  rabbitmq:
+    image: rabbitmq
+    ports:
+      - "5672:5672"
+    networks:
+      - local
+
+networks:
+  local:
+    driver: bridge
