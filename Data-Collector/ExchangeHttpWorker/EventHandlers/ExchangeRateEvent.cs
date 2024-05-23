@@ -7,5 +7,4 @@ namespace ExchangeHttpWorker.EventHandlers
     {
         public ExchangeRates Data { get; set; } = data;
     }
-
 }

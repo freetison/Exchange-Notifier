@@ -2,6 +2,7 @@
   "profiles": {
     "ExchangeHttpWorker": {
       "commandName": "Project",
+      "workingDirectory": "D:\\Projects\\ASA\\aProd\\POLCU\\Exchange-Notifier\\Data-Collector",
       "environmentVariables": {
         "DOTNET_ENVIRONMENT": "Development"
       },

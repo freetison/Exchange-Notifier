@@ -6,6 +6,7 @@ using Tx.Core.Extensions.String;
 
 namespace ExchangeHttpWorker.Workers
 {
+
     public class HttpServiceWorker(IConfiguration configuration, IRapidApiClient rapidApiClient, IMediator mediator)
         : BackgroundService
     {
@@ -23,7 +24,7 @@ namespace ExchangeHttpWorker.Workers
                     await BackgroundProcessing(stoppingToken);
                     return false;
                 });
-           
+
         }
 
         private async Task BackgroundProcessing(CancellationToken stoppingToken)
@@ -33,8 +34,7 @@ namespace ExchangeHttpWorker.Workers
 
             await mediator.Publish(new ExchangeRatesEvent(exchangeRates), stoppingToken);
         }
-       
-    }
 
-  
+    }
+       
 }

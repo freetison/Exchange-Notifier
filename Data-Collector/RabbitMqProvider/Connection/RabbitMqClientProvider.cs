@@ -30,6 +30,6 @@ public class RabbitMqClientProvider(ConnectionFactory factory) : IRabbitMqClient
             processMessage(message);
         };
         channel.BasicConsume(queue: queueName, autoAck: true, consumer: consumer);
-       
+
     }
 }

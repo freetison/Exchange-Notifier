@@ -1,0 +1,5 @@
+{
+  "inference.model": "codellama:7b-code-q6_K",
+  "inference.custom.model": "llama-3",
+  "CodeGPT.apiKey": "Ollama"
+}

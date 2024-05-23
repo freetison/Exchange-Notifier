@@ -1,6 +1,7 @@
-﻿using ExchangeHttpWorker.Services.Http;
-using Flurl.Http;
+﻿using Flurl.Http;
 using Flurl.Http.Configuration;
+
+using HttpServiceProvider.Services;
 
 namespace ExchangeHttpWorker.DependencyInjection
 {
@@ -12,7 +13,7 @@ namespace ExchangeHttpWorker.DependencyInjection
             services.AddSingleton(sp => new FlurlClientCache()
                 .Add("RapidApi", config["RAPIDAPI_BASE_URL"], builder => builder
                     .WithSettings(s => s.Timeout = TimeSpan.FromSeconds(10))
-                    .WithHeaders(new Dictionary<string, object>
+                    .WithHeaders(new Dictionary<string, object?>
                     {
                         { "X-RapidAPI-Key", config["X-RAPIDAPI-KEY"] },
                         { "X-RapidAPI-Host", config["X-RAPIDAPI-HOST"] }

@@ -32,3 +32,6 @@ Crete a User Secret json / or add enviroment variables to the .net ExchangeHttpW
 "TELEGRAM_BOT_BASE_URL" : "https://api.telegram.org/bot",
 "TELEGRAM_BOT_TOKEN" : "YOUR TOKEN"
 }
+
+Docker:
+docker compose --env-file .env up -d

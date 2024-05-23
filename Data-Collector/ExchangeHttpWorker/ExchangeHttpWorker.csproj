@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Worker">
+﻿<Project Sdk="Microsoft.NET.Sdk.Worker">
 
     <PropertyGroup>
         <TargetFramework>net8.0</TargetFramework>
@@ -6,6 +6,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <UserSecretsId>dotnet-ExchangeHttpWorker-F9B45EB9-5C98-4CB5-A34E-ECFC65E83642</UserSecretsId>
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+        <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
     </PropertyGroup>
 
     <ItemGroup>
@@ -14,16 +15,16 @@
 
         <PackageReference Include="Flurl.Http" Version="4.0.2" />
         <PackageReference Include="Microsoft.Extensions.Http" Version="8.0.0" />
-        <PackageReference Include="Microsoft.Extensions.Http.Polly" Version="8.0.4" />
+        <PackageReference Include="Microsoft.Extensions.Http.Polly" Version="8.0.5" />
         <PackageReference Include="Microsoft.Extensions.Logging" Version="8.0.0" />
         <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.1" />
         <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="8.0.0" />
         <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
         <PackageReference Include="Microsoft.Extensions.Options" Version="8.0.2" />
         <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="8.0.0" />
-        <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.19.6" />
+        <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.20.1" />
 
-        <PackageReference Include="Polly" Version="8.3.1" />
+        <PackageReference Include="Polly" Version="8.4.0" />
         <PackageReference Include="RabbitMQ.Client" Version="6.8.1" />
         <PackageReference Include="System.ComponentModel.Composition" Version="8.0.0" />
         <PackageReference Include="Tx.Core.Extensions.Assembly" Version="2.1.0" />
@@ -31,38 +32,8 @@
         
     </ItemGroup>
 
-
     <ItemGroup>
-      <Compile Remove="Subscribers\QueueProcessor.cs" />
-      <Compile Remove="Subscribers\**" />
-      <Compile Remove="Services\**" />
-      <Compile Remove="DependencyInjection\HttpServicesConfigure.cs" />
-      <Compile Remove="Models\RapidApi\**" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <EmbeddedResource Remove="Subscribers\**" />
-      <EmbeddedResource Remove="Services\**" />
-      <EmbeddedResource Remove="Models\RapidApi\**" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Content Remove="Subscribers\**" />
-      <Content Remove="Services\**" />
-      <Content Remove="Models\RapidApi\**" />
-      <Content Include="..\.dockerignore">
-        <Link>.dockerignore</Link>
-      </Content>
-    </ItemGroup>
-
-    <ItemGroup>
-      <None Remove="Subscribers\**" />
-      <None Remove="Services\**" />
-      <None Remove="Models\RapidApi\**" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <ProjectReference Include="..\Providers\HttpServiceProvider\HttpServiceProvider.csproj" />
-      <ProjectReference Include="..\Providers\RabbitMqProvider\RabbitMqProvider.csproj" />
+      <ProjectReference Include="..\HttpServiceProvider\HttpServiceProvider.csproj" />
+      <ProjectReference Include="..\RabbitMqProvider\RabbitMqProvider.csproj" />
     </ItemGroup>
 </Project>

@@ -11,8 +11,10 @@ public class TelegramBotProcessorHandler(ILogger<TelegramBotProcessorHandler> lo
 
     public async Task Handle(ExchangeRatesEvent notification, CancellationToken cancellationToken)
     {
-        var message = notification.Data.ToJson();
-        var result = await _telegramBotClient.SendMessageAsync(-4277423125, message);
+        // esto debe ocurrir cuando lea de la queue, el resultado del rule-processor
+
+        //var message = notification.Data.ToJson();
+        //var result = await _telegramBotClient.SendMessageAsync(-4277423125, message);
 
         logger.LogInformation($"Message was sent to Telegram");
     }

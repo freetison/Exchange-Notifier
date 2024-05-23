@@ -10,16 +10,7 @@
       <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
       <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="8.0.0" />
       <PackageReference Include="RabbitMQ.Client" Version="6.8.1" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Reference Include="Tx.Core.Extensions.String">
-        <HintPath>C:\Users\asaye\.nuget\packages\tx.core.extensions.string\2.1.0\lib\net8.0\Tx.Core.Extensions.String.dll</HintPath>
-      </Reference>
-    </ItemGroup>
-
-    <ItemGroup>
-      <Compile Remove="DependencyInjection\QueueProviderServicesConfigure.cs" />
+      <PackageReference Include="Tx.Core.Extensions.String" Version="2.1.0" />
     </ItemGroup>
 
 </Project>

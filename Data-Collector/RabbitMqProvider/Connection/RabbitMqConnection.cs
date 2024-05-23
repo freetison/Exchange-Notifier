@@ -1,5 +1,6 @@
 ﻿using RabbitMQ.Client;
 using RabbitMqProvider.Models;
+using Tx.Core.Extensions.String;
 
 namespace RabbitMqProvider.Connection;
 
@@ -17,13 +18,11 @@ public class RabbitMqConnection : IRabbitMqConnection, IDisposable
     {
         var factory = new ConnectionFactory
         {
-            HostName = settings.RabbitMqHostname,
-            // UserName = settings.RabbitMqUsername,
-            // Password = settings.RabbitMqPassword,
-            // Port = settings.RabbitMqPort.GetValueOrDefault(),
-            // DispatchConsumersAsync = true,
-            // AutomaticRecoveryEnabled = true,
-            // ConsumerDispatchConcurrency = settings.RabbitMqConsumerConcurrency.GetValueOrDefault(),
+            HostName = $"{settings.RabbitMqHostname}",
+            VirtualHost = "/",
+            Port = settings.RabbitMqPort,
+            UserName = settings.RabbitMqUsername,
+            Password = settings.RabbitMqPassword
         };
         _connection = factory.CreateConnection();
     }

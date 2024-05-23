@@ -1,44 +1,74 @@
 services:
-  worker:
-    build: .
-    environment:
-      - MONGO_URL=${MONGO_URL}
-      - MONGO_INITDB_DATABASE=${MONGO_DB_NAME}
-      - MONGO_COLLECTION_NAME=${MONGO_COLLECTION_NAME}
-      - RABBITMQ_URL=${RABBITMQ_URL}
-      - QUEUE_NAME=${QUEUE_NAME}
-    env_file:
-      - .env
-    volumes:
-      - .:/usr/src/app
-    depends_on:
-      - mongodb
-      - rabbitmq
-    networks:
-      - local
-
-  mongodb:
-    image: mongo:latest
-    container_name: rules-engine-mongodb
-    restart: always
-    command: mongod --port 27019
-    ports:
-      - "27019:27019"
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
-      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
-      MONGO_INITDB_DATABASE: ${MONGO_DB_NAME}
-    volumes:
-      - ./data:/data/db
-    networks:
-      - local
-
   rabbitmq:
-    image: rabbitmq
+    image: rabbitmq:management
+    container_name: ManagedRabbitmq
+    environment:
+      - RABBITMQ_DEFAULT_USER=${RABBITMQ_USER_NAME}
+      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_USER_PASS}
+      - RABBITMQ_DEFAULT_VHOST=${RABBITMQ_DEFAULT_VHOST}
     ports:
-      - "5672:5672"
+      - "${RABBITMQ_PORT}:${RABBITMQ_PORT}"
+      - "${RABBITMQ_MANAGEMENT_PORT}:${RABBITMQ_MANAGEMENT_PORT}"
     networks:
       - local
+
+  exchangehttpworker:
+    container_name: DataCollectorWorker
+    depends_on:
+      - rabbitmq
+    build:
+      context: ./Data-Collector
+      dockerfile: Dockerfile
+      args:
+        - BUILD_CONFIGURATION=Release
+    environment:
+      - NETCORE_HUB_SERVER=${NETCORE_HUB_SERVER}
+      - REQUEST_RATE_IN_SECONDS=${REQUEST_RATE_IN_SECONDS}
+      - RABBITMQ_HOST_NAME=${RABBITMQ_HOST_NAME}
+      - RABBITMQ_PORT=${RABBITMQ_PORT}
+      - RABBITMQ_CONSUMER_CONCURRENCY=${RABBITMQ_CONSUMER_CONCURRENCY}
+      - RABBITMQ_USER_NAME=${RABBITMQ_USER_NAME}
+      - RABBITMQ_USER_PASS=${RABBITMQ_USER_PASS}
+      - RAPIDAPI_BASE_URL=${RAPIDAPI_BASE_URL}
+      - X-RAPIDAPI-KEY=${X-RAPIDAPI-KEY}
+      - X-RAPIDAPI-HOST=${X-RAPIDAPI-HOST}
+      - TELEGRAM_BOT_BASE_URL=${TELEGRAM_BOT_BASE_URL}
+      - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN}
+    networks:
+      - local
+
+  # worker:
+  #     build: .
+  #     environment:
+  #       - MONGO_URL=${MONGO_URL}
+  #       - MONGO_INITDB_DATABASE=${MONGO_DB_NAME}
+  #       - MONGO_COLLECTION_NAME=${MONGO_COLLECTION_NAME}
+  #       - RABBITMQ_URL=${RABBITMQ_URL}
+  #       - QUEUE_NAME=${QUEUE_NAME}
+  #     env_file:
+  #       - .env
+  #     volumes:
+  #       - .:/usr/src/app
+  #     depends_on:
+  #       - mongodb
+  #       - rabbitmq
+  #     networks:
+  #       - local
+
+  #   mongodb:#     image: mongo:latest
+  #     container_name: rules-engine-mongodb
+  #     restart: always
+  #     command: mongod --port 27019
+  #     ports:
+  #       - "27019:27019"
+  #     environment:
+  #       MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+  #       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+  #       MONGO_INITDB_DATABASE: ${MONGO_DB_NAME}
+  #     volumes:
+  #       - ./data:/data/db
+  #     networks:
+  #       - local
 
 networks:
   local:
