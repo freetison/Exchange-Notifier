@@ -13,4 +13,22 @@
       <PackageReference Include="Tx.Core.Extensions.String" Version="2.1.0" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Compile Remove="Connection\RabbitMqConnection.cs" />
+      <Compile Remove="Models\RabbitMqConfigurationSettings.cs" />
+      <Compile Remove="Client\Consumer\ConsumerBase.cs" />
+      <Compile Remove="Client\RabbitMqClientBase.cs" />
+      <Compile Remove="Client\Producer\ProducerBase.cs" />
+      <Compile Remove="Client\**" />
+      <Compile Remove="Connection\IRabbitMqConnection.cs" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Remove="Client\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="Client\**" />
+    </ItemGroup>
+
 </Project>

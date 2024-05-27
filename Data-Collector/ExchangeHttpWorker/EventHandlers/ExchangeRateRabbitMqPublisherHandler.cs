@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using RabbitMqProvider.Connection;
+using RabbitMqProvider.Message;
 using Tx.Core.Extensions.String;
 
 namespace ExchangeHttpWorker.EventHandlers;
@@ -20,6 +21,8 @@ public class ExchangeRateRabbitMqPublisherHandler : INotificationHandler<Exchang
         
         using var scope = _scopeFactory.CreateScope();
         var rabbitMqClientProvider = scope.ServiceProvider.GetRequiredService<IRabbitMqClientProvider>();
+
+       
         rabbitMqClientProvider.PublishMessage<string>(notification.Data.ToJson());
         _logger.LogInformation($"Message was sent to the queue");
         return Task.CompletedTask;

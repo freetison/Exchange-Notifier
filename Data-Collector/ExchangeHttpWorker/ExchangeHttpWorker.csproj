@@ -38,10 +38,17 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="RabbitMq\Consumer\" />
+      <Compile Remove="RabbitMq\Consumer\ExchangeRateConsumer.cs" />
+      <Compile Remove="DependencyInjection\RabbitMqConfigure.cs" />
+      <Compile Remove="EventHandlers\ExchangeRatePublisherHandler.cs" />
+      <Compile Remove="RabbitMq\Producer\ExchangeRatePublisher.cs" />
+      <Compile Remove="Commands\LogCommand.cs" />
+      <Compile Remove="EventHandlers\LogCommandHandler.cs" />
+      <Compile Remove="Workers\NotifierServiceWorker.cs" />
+      <Compile Remove="Workers\ExchangeRateConsumerWorker.cs" />
     </ItemGroup>
 
     <ItemGroup>
-      <Compile Remove="RabbitMq\Consumer\ExchangeRateConsumer.cs" />
+      <Folder Include="Commands\" />
     </ItemGroup>
 </Project>
