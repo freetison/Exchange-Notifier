@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using RabbitMqProvider.Client.Producer;
+﻿using RabbitMqProvider.Client.Producer;
 using RabbitMqProvider.Connection;
 using RabbitMqProvider.Models;
 using Tx.Core.Extensions.String;

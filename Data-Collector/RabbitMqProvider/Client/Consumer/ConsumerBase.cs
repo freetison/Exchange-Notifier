@@ -8,16 +8,14 @@ namespace RabbitMqProvider.Client.Consumer
 {
     public abstract class ConsumerBase(
         ConnectionFactory connectionFactory,
-        ILogger<ConsumerBase> consumerLogger,
-        ILogger<RabbitMqClientBase> logger)
-        : RabbitMqClientBase(connectionFactory, logger)
+        ILogger<ConsumerBase> consumerLogger)
+        : RabbitMqClientBase(connectionFactory)
     {
-        protected virtual string QueueName { get; set; } = connectionFactory.VirtualHost;
-
+        protected abstract string QueueName { get; set; }
         protected virtual Task<T> OnEventReceived<T>(object sender, BasicDeliverEventArgs @event)
         {
             T? message = default(T);
-            
+
             try
             {
                 var body = Encoding.UTF8.GetString(@event.Body.ToArray());
@@ -31,7 +29,7 @@ namespace RabbitMqProvider.Client.Consumer
             {
                 Channel?.BasicAck(@event.DeliveryTag, false);
             }
-            
+
             return Task.FromResult(message)!;
         }
     }

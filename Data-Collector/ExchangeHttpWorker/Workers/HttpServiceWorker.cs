@@ -18,7 +18,7 @@ namespace ExchangeHttpWorker.Workers
             var requestRate = _configuration["REQUEST_RATE_IN_SECONDS"].ToDouble(60);
             await Policy
                 .HandleResult<bool>(c => c == false)
-                .WaitAndRetryForeverAsync(_ => TimeSpan.FromMinutes(requestRate))
+                .WaitAndRetryForeverAsync(_ => TimeSpan.FromSeconds(requestRate))
                 .ExecuteAsync(async () =>
                 {
                     await BackgroundProcessing(stoppingToken);

@@ -1,6 +1,5 @@
 ﻿using RabbitMQ.Client;
 using RabbitMqProvider.Models;
-using Tx.Core.Extensions.String;
 
 namespace RabbitMqProvider.Connection;
 

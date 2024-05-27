@@ -23,23 +23,46 @@ public static class RabbitMqProviderConfigure
 
         //services.AddSingleton<RabbitMqConfigurationSettings>(setting);
 
-        services.AddSingleton<IRabbitMqClientProvider>(provider =>
+        services.AddSingleton<RabbitMqConnectionInformation>(provider => new RabbitMqConnectionInformation
         {
-            var factory = new ConnectionFactory
-            {
-                HostName = config["RABBITMQ_HOST_NAME"],
-                Port = config["RABBITMQ_PORT"].ToInt(5672),
-                UserName = config["RABBITMQ_USER_NAME"],
-                Password = config["RABBITMQ_USER_PASS"],
-                DispatchConsumersAsync = true,
-                AutomaticRecoveryEnabled = true,
-                ConsumerDispatchConcurrency = config["RABBITMQ_CONSUMER_CONCURRENCY"].ToInt(50),
-            };
-
-            return new RabbitMqClientProvider(factory);
+            Exchange = config["RABBITMQ_EXCHANGE"],
+            QueueName = config["RABBITMQ_QUEUE_NAME"],
+            RoutingKey = config["RABBITMQ_ROUTING_KEY"],
         });
 
-        services.AddSingleton<IRabbitMqProducer<LogIntegrationEvent>, LogProducer>();
+        
+        services.AddSingleton<IConnectionFactory>(provider => new ConnectionFactory
+        {
+            HostName = config["RABBITMQ_HOST_NAME"],
+            Port = config["RABBITMQ_PORT"].ToInt(5672),
+            UserName = config["RABBITMQ_USER_NAME"],
+            Password = config["RABBITMQ_USER_PASS"],
+            VirtualHost = config["RABBITMQ_VIRTUALHOST"],
+            DispatchConsumersAsync = true,
+            AutomaticRecoveryEnabled = true,
+            ConsumerDispatchConcurrency = config["RABBITMQ_CONSUMER_CONCURRENCY"].ToInt(50),
+        });
+        
+        services.AddScoped<IRabbitMqClientProvider, RabbitMqClientProvider>();
+        // services.AddSingleton<IRabbitMqClientProvider>(provider =>
+        // {
+        //     var factory = new ConnectionFactory
+        //     {
+        //         HostName = config["RABBITMQ_HOST_NAME"],
+        //         Port = config["RABBITMQ_PORT"].ToInt(5672),
+        //         UserName = config["RABBITMQ_USER_NAME"],
+        //         Password = config["RABBITMQ_USER_PASS"],
+        //         DispatchConsumersAsync = true,
+        //         AutomaticRecoveryEnabled = true,
+        //         ConsumerDispatchConcurrency = config["RABBITMQ_CONSUMER_CONCURRENCY"].ToInt(50),
+        //     };
+        //
+        //     return new RabbitMqClientProvider(factory);
+        // });
+
+        
+        
+        services.AddSingleton<IRabbitMqProducer<LogIntegrationEvent>, ExchangeRatePublisher>();
         services.AddSingleton(serviceProvider =>
        {
            var uri = new Uri($"amqp://{config["RABBITMQ_USER_NAME"]}:{config["RABBITMQ_USER_PASS"]}@{config["RABBITMQ_HOST_NAME"]}:{config["RABBITMQ_PORT"].ToInt(5672)}/{config["RABBITMQ_VIRTUALHOST"]}");

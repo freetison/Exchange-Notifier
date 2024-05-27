@@ -1,6 +1,4 @@
-﻿using System.Threading.Channels;
-
-namespace RabbitMqProvider.Client.Producer;
+﻿namespace RabbitMqProvider.Client.Producer;
 
 public interface IMessageProducer
 {

@@ -36,4 +36,12 @@
       <ProjectReference Include="..\HttpServiceProvider\HttpServiceProvider.csproj" />
       <ProjectReference Include="..\RabbitMqProvider\RabbitMqProvider.csproj" />
     </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="RabbitMq\Consumer\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Remove="RabbitMq\Consumer\ExchangeRateConsumer.cs" />
+    </ItemGroup>
 </Project>

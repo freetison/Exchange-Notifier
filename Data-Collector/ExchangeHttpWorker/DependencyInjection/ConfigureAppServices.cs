@@ -10,9 +10,11 @@ namespace ExchangeHttpWorker.DependencyInjection
             services.AddLogging();
             services.AddAddMediatRService();
             services.AddRabbitMqConnection(hostContext);
-            services.AddRabbitMqProvider(hostContext);
+            services.AddRabbitMqProvider(hostContext);  //OK
             services.AddHttpProviders(hostContext);
             services.AddHostedService<HttpServiceWorker>();
+            // services.AddHostedService<ExchangeRateConsumerWorker>();
+            services.AddHostedService<RabbitMqConsumerWorker>();
             // services.AddHostedService<NotifierServiceWorker>();
 
         }

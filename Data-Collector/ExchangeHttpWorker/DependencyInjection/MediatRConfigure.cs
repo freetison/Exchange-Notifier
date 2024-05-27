@@ -1,7 +1,6 @@
 ﻿using System.Reflection;
 
 
-
 namespace ExchangeHttpWorker.DependencyInjection
 {
     public static class MediatRConfigure

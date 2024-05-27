@@ -1,6 +1,5 @@
 ﻿using HttpServiceProvider.Services;
 using MediatR;
-using Tx.Core.Extensions.String;
 
 namespace ExchangeHttpWorker.EventHandlers;
 
@@ -16,8 +15,7 @@ public class TelegramBotProcessorHandler(ILogger<TelegramBotProcessorHandler> lo
         //var message = notification.Data.ToJson();
         //var result = await _telegramBotClient.SendMessageAsync(-4277423125, message);
 
-        logger.LogInformation($"Message was sent to Telegram");
+        // logger.LogInformation($"Message was sent to Telegram");
     }
    
 }
-

@@ -3,16 +3,14 @@
 using Newtonsoft.Json;
 
 using RabbitMQ.Client;
-using RabbitMqProvider.Client;
 using System.Text;
 
 namespace RabbitMqProvider.Client.Producer;
 
 public abstract class ProducerBase<T>(
     ConnectionFactory connectionFactory,
-    ILogger<RabbitMqClientBase> logger,
     ILogger<ProducerBase<T>> producerBaseLogger)
-    : RabbitMqClientBase(connectionFactory, logger), IRabbitMqProducer<T>
+    : RabbitMqClientBase(connectionFactory), IRabbitMqProducer<T>
 {
     protected abstract string ExchangeName { get; }
     protected abstract string RoutingKeyName { get; }

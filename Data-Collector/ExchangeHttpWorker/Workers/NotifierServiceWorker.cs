@@ -1,53 +1,76 @@
-﻿using ExchangeHttpWorker.EventHandlers;
-using HttpServiceProvider.Services;
+﻿using ExchangeHttpWorker.Commands;
 using MediatR;
-using Polly;
-
-using RabbitMqProvider.Connection;
-
-using Tx.Core.Extensions.String;
+using RabbitMQ.Client;
+using RabbitMQ.Client.Events;
+using RabbitMqProvider.Client.Consumer;
+using ConnectionFactory = RabbitMQ.Client.ConnectionFactory;
 
 namespace ExchangeHttpWorker.Workers
 {
-    public class NotifierServiceWorker(IConfiguration configuration, IRabbitMqClientProvider rabbitMqClientProvider, IMediator mediator)
-        : BackgroundService
+    public sealed class NotifierServiceWorker : ConsumerBase, IHostedService
     {
-        private readonly IConfiguration _configuration = configuration;
-
-
-        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+        protected override string QueueName { get; set; } = "moneyRates-queue";
+        
+        public NotifierServiceWorker(
+            IMediator mediator,
+            ConnectionFactory connectionFactory,
+            ILogger<NotifierServiceWorker> logConsumerLogger,
+            ILogger<ConsumerBase> consumerLogger) :
+            base(connectionFactory, consumerLogger)
         {
-            // Ejemplo de nombre de cola
-            string queueName = "testQueue";
-
-            await Policy
-                .HandleResult<bool>(c => c == false)
-                .RetryForeverAsync()
-                .ExecuteAsync(async () =>
-                {
-                    await BackgroundProcessing(queueName, stoppingToken);
-                    return false;
-                });
-           
+            try
+            {
+                var consumer = new AsyncEventingBasicConsumer(Channel);
+                consumer.Received += OnEventReceived<LogCommand>;
+                Channel.BasicConsume(queue: QueueName, autoAck: false, consumer: consumer);
+            }
+            catch (Exception ex)
+            {
+                logConsumerLogger.LogCritical(ex, "Error while consuming message");
+            }
         }
 
-        private async Task BackgroundProcessing(string queueName, CancellationToken stoppingToken)
-        {
-             rabbitMqClientProvider.ReadMessages(queueName, ProcessMessage);
-            
-            //await mediator.Publish(new ExchangeRatesEvent(exchangeRates), stoppingToken);
+        public Task StartAsync(CancellationToken cancellationToken) => Task.CompletedTask;
 
-            
+        public Task StopAsync(CancellationToken cancellationToken)
+        {
+            Dispose();
+            return Task.CompletedTask;
         }
 
-        private void ProcessMessage(string message)
-        {
-            // Implementar la lógica para procesar el mensaje recibido
-            Console.WriteLine($"Mensaje recibido: {message}");
-        }
+        // protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+        // {
+        //     // Ejemplo de nombre de cola
+        //     string queueName = "testQueue";
+        //
+        //     await Policy
+        //         .HandleResult<bool>(c => c == false)
+        //         .RetryForeverAsync()
+        //         .ExecuteAsync(async () =>
+        //         {
+        //             await BackgroundProcessing(queueName, stoppingToken);
+        //             return false;
+        //         });
+        //    
+        // }
+        //
+        // private async Task BackgroundProcessing(string queueName, CancellationToken stoppingToken)
+        // {
+        //      _rabbitMqClientProvider.ReadMessages(queueName, ProcessMessage);
+        //     
+        //     //await mediator.Publish(new ExchangeRatesEvent(exchangeRates), stoppingToken);
+        //
+        //     
+        // }
+        //
+        // private void ProcessMessage(string message)
+        // {
+        //     // Implementar la lógica para procesar el mensaje recibido
+        //     Console.WriteLine($"Mensaje recibido: {message}");
+        // }
 
 
     }
 
-  
+
 }
